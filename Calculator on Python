@@ -1,0 +1,39 @@
+import re
+
+def add(x, y):
+    return x + y
+
+def subtract(x, y):
+    return x - y
+
+def multiply(x, y):
+    return x * y
+
+def divide(x, y):
+    if y == 0:
+        return "Cannot divide by zero"
+    return x / y
+
+def calculate(expression):
+    # Define regular expressions to validate the input
+    valid_expression = re.compile(r'^\d+(\.\d+)? [+\-*/] \d+(\.\d+)?$')
+
+    if not valid_expression.match(expression):
+        return "Invalid input"
+
+    try:
+        # Evaluate the expression using eval()
+        result = eval(expression)
+        return result
+    except ZeroDivisionError:
+        return "Cannot divide by zero"
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+while True:
+    user_input = input("Enter an expression (or 'q' to quit): ")
+    if user_input == 'q':
+        break
+
+    result = calculate(user_input)
+    print(f"Result: {result}")
