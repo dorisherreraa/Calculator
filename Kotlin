@@ -1,1 +1,66 @@
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var resultTextView: TextView
+    private var currentInput = StringBuilder()
+    private var currentOperator: String? = null
+    private var operand1: Double? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        resultTextView = findViewById(R.id.resultTextView)
+    }
+
+    fun onDigitClick(view: View) {
+        val digit = (view as Button).text.toString()
+        currentInput.append(digit)
+        updateResultView()
+    }
+
+    fun onOperatorClick(view: View) {
+        currentOperator = (view as Button).text.toString()
+        operand1 = currentInput.toString().toDouble()
+        currentInput.clear()
+    }
+
+    fun onEqualClick(view: View) {
+        if (currentOperator != null && operand1 != null) {
+            val operand2 = currentInput.toString().toDouble()
+            val result = performOperation(operand1!!, operand2, currentOperator!!)
+            resultTextView.text = result.toString()
+            currentInput.clear()
+            currentInput.append(result)
+            operand1 = result
+            currentOperator = null
+        }
+    }
+
+    fun onClearClick(view: View) {
+        currentInput.clear()
+        currentOperator = null
+        operand1 = null
+        updateResultView()
+    }
+
+    private fun updateResultView() {
+        resultTextView.text = currentInput.toString()
+    }
+
+    private fun performOperation(operand1: Double, operand2: Double, operator: String): Double {
+        return when (operator) {
+            "+" -> operand1 + operand2
+            "-" -> operand1 - operand2
+            "*" -> operand1 * operand2
+            "/" -> operand1 / operand2
+            else -> throw IllegalArgumentException("Invalid operator")
+        }
+    }
+}
 
